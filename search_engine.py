@@ -51,7 +51,7 @@ for doc in documents:
         tempWord.append(word)
     tempDoc.append(' '.join(tempWord))
 documents = tempDoc
-
+print(documents)
 
 #Identify the index terms.
 #--> add your Python code here
@@ -66,6 +66,26 @@ print(terms)
 #Build the tf-idf term weights matrix.
 #--> add your Python code here
 docMatrix = []
+tfMatrix = []
+dfMatrix = []
+idfMatrix =[]
+for doc in documents:
+    tfRow = []
+    for term in terms:
+        tf = doc.count(term)/len(doc.split())
+        tfRow.append(tf)
+    tfMatrix.append(tfRow)
+print(tfMatrix)
+
+for term in terms:
+    df = 0
+    for doc in documents:
+        if term in doc:
+            df = df + 1
+    dfMatrix.append(df)
+print(dfMatrix)
+
+
 
 #Calculate the document scores (ranking) using document weigths (tf-idf) calculated before and query weights (binary - have or not the term).
 #--> add your Python code here
