@@ -1,9 +1,9 @@
 #-------------------------------------------------------------------------
 # AUTHOR: Nathan Pham
 # FILENAME: search_engine.py
-# SPECIFICATION: description of the program
+# SPECIFICATION: Practice calculating tf-idf, document score, and precision/recall on a .csv file
 # FOR: CS 4250- Assignment #1
-# TIME SPENT: how long it took you to complete the assignment
+# TIME SPENT: 1hr and 20min
 #-----------------------------------------------------------*/
 
 #IMPORTANT NOTE: DO NOT USE ANY ADVANCED PYTHON LIBRARY TO COMPLETE THIS CODE SUCH AS numpy OR pandas. You have to work here only with standard arrays
@@ -52,7 +52,9 @@ for doc in documents:
         tempWord.append(word)
     tempDoc.append(' '.join(tempWord))
 documents = tempDoc
+print("Stemming:")
 print(documents)
+print()
 
 #Identify the index terms.
 #--> add your Python code here
@@ -62,7 +64,9 @@ for doc in documents:
     for word in splitDoc:
         if word not in terms:
             terms.append(word)
+print("Index Terms")
 print(terms)
+print()
 
 #Build the tf-idf term weights matrix.
 #--> add your Python code here
@@ -75,7 +79,6 @@ for doc in documents:
         tf = doc.count(term)/len(doc.split())
         tfRow.append(tf)
     tfMatrix.append(tfRow)
-print(tfMatrix)
 
 for term in terms:
     df = 0
@@ -83,7 +86,6 @@ for term in terms:
         if term in doc:
             df = df + 1
     dfMatrix.append(df)
-print(dfMatrix)
 
 for tfRow in tfMatrix:
     tfidfRow = []
@@ -91,7 +93,9 @@ for tfRow in tfMatrix:
         tfidf = (tfRow[x]) * (math.log(3.0/dfMatrix[x], 10))
         tfidfRow.append(tfidf)
     docMatrix.append(tfidfRow)
+print("tf-idf Matrix:")
 print(docMatrix)
+print()
 
 
 
@@ -107,7 +111,6 @@ for tfRow in tfMatrix:
         else:
             queryRow.append(0.0)
     queryMatrix.append(queryRow)
-print(queryMatrix)
 
 for x in range(len(docMatrix)):
     tfidfRow = docMatrix[x]
@@ -116,7 +119,9 @@ for x in range(len(docMatrix)):
     for y in range(len(tfidfRow)):
         docScore = docScore + (tfidfRow[y] * queryRow[y])
     docScores.append(docScore)
+print("Document Scores:")
 print(docScores)
+print()
 
 
 #Calculate and print the precision and recall of the model by considering that the search engine will return all documents with scores >= 0.1.
@@ -127,7 +132,6 @@ for docScore in docScores:
         docRelevance.append(' R')
     else:
         docRelevance.append(' I')
-print(docRelevance)
 
 truePositive = 0.0
 falsePositive = 0.0
@@ -136,7 +140,14 @@ for x in range(len(docRelevance)):
         truePositive = truePositive + 1.0
     else:
         falsePositive = falsePositive + 1.0
-print(labels)
-print(truePositive)
+print("Number of True Positives:", truePositive)
+print("Number of False Positives:", falsePositive)
+# we retrieved all documents therefore true neg and false neg are 0
+print("Number of True Negatives: 0.0")
+print("Number of False Negatives: 0.0")
+print()
+
 precision = truePositive/(truePositive+falsePositive)
 print("Precision: " + f"{precision:.2%}")
+recall =truePositive/(truePositive+0.0) # we added true negative(0.0) to denominator
+print("Recall: " + f"{recall:.2%}")
